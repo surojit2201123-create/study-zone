@@ -27,6 +27,13 @@ jobs:
       - name: Build APK using Bubblewrap
         run: |
           cd android-app || mkdir -p android-app && cd android-app
-          # Fallback if init skipped, configure basic properties
           bubblewrap update --manifest=https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/manifest.json || true
           bubblewrap build || echo "Check manifest configuration"
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-apk
+          path: |
+            android-app/*.apk
+            android-app/app/build/outputs/apk/release/*.apk
